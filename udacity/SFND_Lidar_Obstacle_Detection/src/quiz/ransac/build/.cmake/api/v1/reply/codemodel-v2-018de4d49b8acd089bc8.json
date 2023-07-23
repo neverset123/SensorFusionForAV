@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "playback",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "quizRansac::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-quizRansac-Debug-81effaa5af62a1b7f752.json",
+					"name" : "quizRansac",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/lhome/yuwewan/workspace/Minverva/sensor_fusion/udacity/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build",
+		"source" : "/lhome/yuwewan/workspace/Minverva/sensor_fusion/udacity/SFND_Lidar_Obstacle_Detection/src/quiz/ransac"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
