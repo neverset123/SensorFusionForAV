@@ -1,3 +1,0 @@
-/lhome/yuwewan/workspace/Minverva/sensor_fusion/udacity/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/quizRansac.dir
-/lhome/yuwewan/workspace/Minverva/sensor_fusion/udacity/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/edit_cache.dir
-/lhome/yuwewan/workspace/Minverva/sensor_fusion/udacity/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/rebuild_cache.dir
