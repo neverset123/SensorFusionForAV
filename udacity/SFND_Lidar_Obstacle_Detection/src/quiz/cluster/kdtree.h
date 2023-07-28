@@ -84,17 +84,14 @@ struct KdTree
 			if(distance(target, node->point)<=distanceTol)
 			{
 				ids.push_back(node->id);
-				searchNode(node->left, target, depth+1, distanceTol, ids);
-				searchNode(node->right, target, depth+1, distanceTol, ids);
 			}
-			else{
-				if(target[depth%2]<node->point[depth%2])
-				{
-					searchNode(node->left, target, depth+1, distanceTol, ids);
-				}
-				else{
-					searchNode(node->right, target, depth+1, distanceTol, ids);
-				}
+			if(target[depth%2]-distanceTol<node->point[depth%2])
+			{
+				searchNode(node->left, target, depth+1, distanceTol, ids);
+			}
+			if (target[depth%2]+distanceTol>node->point[depth%2])
+			{
+				searchNode(node->right, target, depth+1, distanceTol, ids);
 			}
 		}
 
