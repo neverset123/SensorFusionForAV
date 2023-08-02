@@ -1,3 +1,0 @@
-/lhome/yuwewan/workspace/Minverva/sensor_fusion/udacity/SFND_Lidar_Obstacle_Detection/build/CMakeFiles/environment.dir
-/lhome/yuwewan/workspace/Minverva/sensor_fusion/udacity/SFND_Lidar_Obstacle_Detection/build/CMakeFiles/edit_cache.dir
-/lhome/yuwewan/workspace/Minverva/sensor_fusion/udacity/SFND_Lidar_Obstacle_Detection/build/CMakeFiles/rebuild_cache.dir
