@@ -13,7 +13,7 @@ void descKeypoints1()
 {
     // load image from file and convert to grayscale
     cv::Mat imgGray;
-    cv::Mat img = cv::imread("../images/img1.png");
+    cv::Mat img = cv::imread("images/img1.png");
     cv::cvtColor(img, imgGray, cv::COLOR_BGR2GRAY);
 
     // BRISK detector / descriptor
@@ -44,6 +44,28 @@ void descKeypoints1()
     // time for both steps and compare both BRISK and SIFT
     // with regard to processing speed and the number and 
     // visual appearance of keypoints.
+    detector = cv::SIFT::create();
+    vector<cv::KeyPoint> kptsSIFT;
+
+    t = (double)cv::getTickCount();
+    detector->detect(imgGray, kptsSIFT);
+    t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
+    cout << "SIFT detector with n= " << kptsSIFT.size() << " keypoints in " << 1000 * t / 1.0 << " ms" << endl;
+
+    descriptor = cv::SIFT::create();
+    cv::Mat descSIFT;
+    t = (double)cv::getTickCount();
+    descriptor->compute(imgGray, kptsSIFT, descSIFT);
+    t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
+    cout << "SIFT descriptor in " << 1000 * t / 1.0 << " ms" << endl;
+
+    // visualize results
+    visImage = img.clone();
+    cv::drawKeypoints(img, kptsSIFT, visImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+    windowName = "SIFT Results";
+    cv::namedWindow(windowName, 1);
+    imshow(windowName, visImage);
+    cv::waitKey(0);
 
 }
 

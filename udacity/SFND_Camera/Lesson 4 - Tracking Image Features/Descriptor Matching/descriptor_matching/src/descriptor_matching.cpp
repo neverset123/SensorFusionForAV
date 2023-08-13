@@ -32,8 +32,9 @@ void matchDescriptors(cv::Mat &imgSource, cv::Mat &imgRef, vector<cv::KeyPoint> 
             descRef.convertTo(descRef, CV_32F);
         }
 
-        //... TODO : implement FLANN matching
+        // TODO : implement FLANN matching
         cout << "FLANN matching";
+        matcher = cv::FlannBasedMatcher::create();
     }
 
     // perform matching task
@@ -49,8 +50,22 @@ void matchDescriptors(cv::Mat &imgSource, cv::Mat &imgRef, vector<cv::KeyPoint> 
     { // k nearest neighbors (k=2)
 
         // TODO : implement k-nearest-neighbor matching
-
+        vector<vector<cv::DMatch>> knnmatches;
+        double t = (double)cv::getTickCount();
+        matcher->knnMatch(descSource, descRef, knnmatches, 2);
+        t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
         // TODO : filter matches using descriptor distance ratio test
+        float ratio = 0.8;
+        for(int i=0; i<knnmatches.size(); i++)
+        {
+            if(knnmatches[i][0].distance/knnmatches[i][1].distance<ratio)
+            {
+                matches.push_back(knnmatches[i][0]);
+            }
+        }
+
+        cout << " (KNN) with n=" << matches.size() << " matches in " << 1000 * t / 1.0 << " ms" << endl;
+        cout << "percentage of discarded matches: "<< (knnmatches.size()-matches.size())/(float) knnmatches.size()<< endl;
     }
 
     // visualize results
@@ -66,20 +81,52 @@ void matchDescriptors(cv::Mat &imgSource, cv::Mat &imgRef, vector<cv::KeyPoint> 
 
 int main()
 {
-    cv::Mat imgSource = cv::imread("../images/img1gray.png");
-    cv::Mat imgRef = cv::imread("../images/img2gray.png");
+    cv::Mat imgSource = cv::imread("images/img1gray.png");
+    cv::Mat imgRef = cv::imread("images/img2gray.png");
 
-    vector<cv::KeyPoint> kptsSource, kptsRef; 
-    readKeypoints("../dat/C35A5_KptsSource_BRISK_large.dat", kptsSource);
-    readKeypoints("../dat/C35A5_KptsRef_BRISK_large.dat", kptsRef);
+    vector<cv::KeyPoint> kptsSourceBriskLarge, kptsRefBriskLarge, kptsSourceBriskSmall, kptsRefBriskSmall, kptsSourceSift, kptsRefSift; 
+    readKeypoints("dat/C35A5_KptsSource_BRISK_large.dat", kptsSourceBriskLarge);
+    readKeypoints("dat/C35A5_KptsRef_BRISK_large.dat", kptsRefBriskLarge);
+    readKeypoints("dat/C35A5_KptsSource_BRISK_small.dat", kptsSourceBriskSmall);
+    readKeypoints("dat/C35A5_KptsRef_BRISK_small.dat", kptsRefBriskSmall);   
+    readKeypoints("dat/C35A5_KptsSource_SIFT.dat", kptsSourceSift);
+    readKeypoints("dat/C35A5_KptsRef_SIFT.dat", kptsRefSift);
 
-    cv::Mat descSource, descRef; 
-    readDescriptors("../dat/C35A5_DescSource_BRISK_large.dat", descSource);
-    readDescriptors("../dat/C35A5_DescRef_BRISK_large.dat", descRef);
+    cv::Mat descSourceBriskLarge, descRefBriskLarge, descSourceBriskSmall, descRefBriskSmall, descSourceBSift, descRefSift; 
+    readDescriptors("dat/C35A5_DescSource_BRISK_large.dat", descSourceBriskLarge);
+    readDescriptors("dat/C35A5_DescRef_BRISK_large.dat", descRefBriskLarge);
+    readDescriptors("dat/C35A5_DescSource_BRISK_small.dat", descSourceBriskSmall);
+    readDescriptors("dat/C35A5_DescRef_BRISK_small.dat", descRefBriskSmall);
+    readDescriptors("dat/C35A5_DescSource_SIFT.dat", descSourceBSift);
+    readDescriptors("dat/C35A5_DescRef_SIFT.dat", descRefSift);
 
-    vector<cv::DMatch> matches;
-    string matcherType = "MAT_BF"; 
-    string descriptorType = "DES_BINARY"; 
-    string selectorType = "SEL_NN"; 
-    matchDescriptors(imgSource, imgRef, kptsSource, kptsRef, descSource, descRef, matches, descriptorType, matcherType, selectorType);
+    vector<cv::DMatch> matchesBriskLarge, matchesBriskSmall, matchesSift;
+    // string matcherType = "MAT_BF"; 
+    // string matcherType = "MAT_FLANN"; 
+    // string descriptorType = "DES_BINARY";
+    // string descriptorType = "DES_GRADIENT";
+    // string selectorType = "SEL_NN"; 
+    // string selectorType = "SEL_KNN";
+    matchDescriptors(imgSource, imgRef, kptsSourceBriskSmall, 
+                    kptsRefBriskSmall, descSourceBriskSmall, descRefBriskSmall, matchesBriskSmall, 
+                    "DES_BINARY", "MAT_BF", "SEL_NN");
+    matchesBriskSmall.clear();
+    matchDescriptors(imgSource, imgRef, kptsSourceBriskSmall, 
+                    kptsRefBriskSmall, descSourceBriskSmall, descRefBriskSmall, matchesBriskSmall, 
+                    "DES_BINARY", "MAT_BF", "SEL_KNN");
+    
+    matchDescriptors(imgSource, imgRef, kptsSourceBriskLarge, 
+                    kptsRefBriskLarge, descSourceBriskLarge, descRefBriskLarge, matchesBriskLarge, 
+                    "DES_BINARY", "MAT_BF", "SEL_KNN");
+    matchesBriskLarge.clear();
+    matchDescriptors(imgSource, imgRef, kptsSourceBriskLarge, 
+                kptsRefBriskLarge, descSourceBriskLarge, descRefBriskLarge, matchesBriskLarge, 
+                "DES_BINARY", "MAT_FLANN", "SEL_KNN");
+    matchDescriptors(imgSource, imgRef, kptsSourceSift, 
+                kptsRefSift, descSourceBSift, descRefSift, matchesSift, 
+                "DES_GRADIENT", "MAT_BF", "SEL_KNN");
+    matchesSift.clear();
+    matchDescriptors(imgSource, imgRef, kptsSourceSift, 
+                kptsRefSift, descSourceBSift, descRefSift, matchesSift, 
+                "DES_GRADIENT", "MAT_FLANN", "SEL_KNN");
 }
