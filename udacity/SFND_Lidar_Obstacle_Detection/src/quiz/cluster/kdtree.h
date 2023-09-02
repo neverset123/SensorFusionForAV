@@ -1,6 +1,7 @@
 /* \author Aaron Brown */
 // Quiz on implementing kd tree
-
+#ifndef kdtree_h
+#define kdtree_h
 #include "../../render/render.h"
 #include <cmath>
 
@@ -45,7 +46,7 @@ struct KdTree
 		}
 		else
 		{
-			if(data[depth%2]<node->point[depth%2])
+			if(data[depth%(data.size())]<node->point[depth%(data.size())])
 			{
 				insertNode(node->left, data, id, depth+1);
 			}
@@ -85,11 +86,11 @@ struct KdTree
 			{
 				ids.push_back(node->id);
 			}
-			if(target[depth%2]-distanceTol<node->point[depth%2])
+			if(target[depth%(target.size())]-distanceTol<node->point[depth%(target.size())])
 			{
 				searchNode(node->left, target, depth+1, distanceTol, ids);
 			}
-			if (target[depth%2]+distanceTol>node->point[depth%2])
+			if (target[depth%(target.size())]+distanceTol>node->point[depth%(target.size())])
 			{
 				searchNode(node->right, target, depth+1, distanceTol, ids);
 			}
@@ -107,7 +108,7 @@ struct KdTree
 	
 
 };
-
+#endif 
 
 
 
