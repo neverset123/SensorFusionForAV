@@ -28,8 +28,9 @@ void showLidarTopview()
         int y = (-xw * imageSize.height / worldSize.height) + imageSize.height;
         int x = (-yw * imageSize.width / worldSize.width) + imageSize.width / 2;
 
-
-        cv::circle(topviewImg, cv::Point(x, y), 5, cv::Scalar(0, 0, 255), -1);
+        cout<<xw<<" "<<yw<<endl;
+        if((*it).z>-1.5)
+            cv::circle(topviewImg, cv::Point(x, y), 5, cv::Scalar(0, xw/20*255, 255-xw/20*255), -1);
         
         // TODO: 
         // 1. Change the color of the Lidar points such that 
